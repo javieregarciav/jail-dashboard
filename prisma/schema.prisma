@@ -1,0 +1,238 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../app/generated/prisma"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model blocks {
+  id_block       Int       @id @default(autoincrement())
+  name           String    @db.VarChar(50)
+  alias          String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  id_officer     Int
+  id_prison      Int
+  officers       officers  @relation(fields: [id_officer], references: [id_officer], onDelete: NoAction, onUpdate: NoAction, map: "blocks_ibfk_1")
+  prisons        prisons   @relation(fields: [id_prison], references: [id_prison], onDelete: NoAction, onUpdate: NoAction, map: "blocks_ibfk_2")
+  cells          cells[]
+  inmates        inmates[]
+
+  @@index([id_officer], map: "id_officer")
+  @@index([id_prison], map: "id_prison")
+}
+
+model cells {
+  id_cell       Int       @id @default(autoincrement())
+  cell_capacity Int       @default(1)
+  id_block      Int
+  blocks        blocks    @relation(fields: [id_block], references: [id_block], onDelete: NoAction, onUpdate: NoAction, map: "cells_ibfk_1")
+  inmates       inmates[]
+
+  @@index([id_block], map: "id_block")
+}
+
+model crimes {
+  id_crime    Int       @id @default(autoincrement())
+  description String    @db.VarChar(100)
+  inmates     inmates[]
+}
+
+model inmates {
+  id_inmate      Int       @id @default(autoincrement())
+  name           String    @db.VarChar(100)
+  alias          String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+  id_cell        Int
+  id_crime       Int
+  id_block       Int
+  cells          cells     @relation(fields: [id_cell], references: [id_cell], onDelete: NoAction, onUpdate: NoAction, map: "inmates_ibfk_1")
+  crimes         crimes    @relation(fields: [id_crime], references: [id_crime], onDelete: NoAction, onUpdate: NoAction, map: "inmates_ibfk_2")
+  blocks         blocks    @relation(fields: [id_block], references: [id_block], onDelete: NoAction, onUpdate: NoAction, map: "inmates_ibfk_3")
+
+  @@index([id_cell], map: "id_cell")
+  @@index([id_crime], map: "id_crime")
+  @@index([id_block], map: "id_block")
+}
+
+model officers {
+  id_officer Int      @id @default(autoincrement())
+  name       String   @db.VarChar(50)
+  blocks     blocks[]
+}
+
+model prisons {
+  id_prison    Int      @id @default(autoincrement())
+  name         String   @db.VarChar(50)
+  director     String   @db.VarChar(50)
+  location     String   @db.VarChar(50)
+  max_capacity Int
+  blocks       blocks[]
+}
+
+view all_inmates {
+  id_inmate      Int       @default(0)
+  name           String    @db.VarChar(100)
+  alias          String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+  id_cell        Int
+  id_crime       Int
+  id_block       Int
+}
+
+view block10_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view block1_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view block2_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view block3_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view block4_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view block5_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view block6_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view block7_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view block8_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view block9_inmates {
+  id_block       Int       @default(0)
+  block_name     String    @db.VarChar(50)
+  block_alias    String?   @db.VarChar(50)
+  block_capacity Int       @default(10)
+  officer_name   String    @db.VarChar(50)
+  id_inmate      Int       @default(0)
+  inmate_name    String    @db.VarChar(100)
+  inmate_alias   String?   @db.VarChar(100)
+  sentence       Int
+  admission_date DateTime  @db.Date
+  release_date   DateTime? @db.Date
+}
+
+view blocks_summary {
+  id_block             Int     @default(0)
+  block_name           String  @db.VarChar(50)
+  block_alias          String? @db.VarChar(50)
+  officer_name         String? @db.VarChar(50)
+  total_cells          BigInt  @default(0)
+  max_inmates_capacity Int     @default(10)
+  total_inmates        BigInt  @default(0)
+}
