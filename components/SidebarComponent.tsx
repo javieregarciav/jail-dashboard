@@ -15,14 +15,12 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "./ui/item";
 import { Separator } from "./ui/separator";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useProjectContext } from "@/context/ProjectContext";
 
 const SidebarComponent = () => {
   const { user } = useUser();
   const { prisonName, setPrisonName } = useProjectContext();
-  const pathname = usePathname();
 
   useEffect(() => {
     fetch('/api/prisons').then(res => res.json()).then(data => (data.length > 0 ? setPrisonName(data[0].name) : setPrisonName("Prison Admin")))
